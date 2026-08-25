@@ -1,0 +1,39 @@
+/*
+Detection: Suspicious Regsvr32 Remote Scriptlet Execution
+
+Data Source:
+
+The EVTX attack sample was imported into Splunk
+using the "evtx_attack2" index.
+
+EventCode=1:
+
+Sysmon Event ID 1 records Process Creation events,
+which are used to detect Regsvr32 execution.
+*/
+
+
+/* Detection Query */
+
+index=evtx_attack2 Image="*\\regsvr32.exe"
+
+
+/*
+Validation Note:
+
+The EVTX sample was indexed successfully. Although
+the CommandLine field was not fully parsed, the raw
+Sysmon event confirmed the presence of:
+
+- /i:
+- http://pastebin.com
+- scrobj.dll
+
+These indicators validate the Sigma detection logic.
+*/
+
+
+/* Investigation Query */
+
+index=evtx_attack2 Image="*\\regsvr32.exe"
+| table _time host User Image ParentImage CommandLine ProcessId ParentProcessId

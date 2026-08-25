@@ -1,0 +1,71 @@
+# Validation
+
+## Environment
+
+SIEM
+
+Splunk Enterprise
+
+---
+
+## Dataset
+
+EVTX-ATTACK-SAMPLES
+
+---
+
+## Sample
+
+exec_sysmon_lobin_regsvr32_sct.evtx
+
+---
+
+## Detection Rule
+
+Suspicious Regsvr32 Scriptlet Execution
+
+---
+
+## Validation Procedure
+
+1. Imported the EVTX sample into Splunk Enterprise.
+2. Verified that the Sysmon Process Creation event was indexed successfully.
+3. Examined the raw event to understand the observed behavior.
+4. Authored a Sigma rule based on the collected telemetry.
+5. Converted the Sigma rule into Splunk SPL.
+6. Executed the generated SPL against the imported dataset.
+7. Reviewed the returned event and validated the detection.
+
+---
+
+## Validation Findings
+
+The imported event shows `regsvr32.exe` executing with the `/i:` parameter while referencing a remote HTTP resource hosted on Pastebin and loading `scrobj.dll`.
+
+This combination of indicators is consistent with the Squiblydoo technique documented under MITRE ATT&CK T1218.010.
+
+Although the imported EVTX sample did not fully extract the `CommandLine` field using the `preprocess-winevt` sourcetype, the complete command line was preserved within the raw Sysmon event.
+
+The detection logic was therefore validated using the original event telemetry rather than relying solely on parsed fields.
+
+---
+
+## Detection Result
+
+PASS
+
+---
+
+## Detection Classification
+
+True Positive
+
+---
+
+## Evidence
+
+- Raw Sysmon Event
+- Sigma Rule
+- Sigma to SPL Conversion
+- Splunk Detection Result
+- Investigation View

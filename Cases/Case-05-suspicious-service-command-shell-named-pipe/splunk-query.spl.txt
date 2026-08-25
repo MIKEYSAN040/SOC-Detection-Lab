@@ -1,0 +1,52 @@
+/*
+Detection: Suspicious Windows Service Creation Using Command Shell and Named Pipe
+
+Data Source:
+
+The Windows System EVTX attack sample was imported into Splunk
+using the "evtx_attack2" index.
+
+EventCode=7045:
+
+Windows Event ID 7045 records Service Installation events,
+which are used to detect suspicious Windows services
+configured to execute the command shell and reference
+a named pipe while running as LocalSystem.
+*/
+
+
+/* Detection Query */
+
+index=evtx_attack2 EventCode=7045
+| rex field=_raw "Service Name:\s+(?<ServiceName>.*?)\s+File Name:"
+| rex field=_raw "File Name:\s+(?<ImagePath>.*?)\s+Service Type:"
+| rex field=_raw "Service Account:\s+(?<ServiceAccount>.*?)\s*$"
+| search ImagePath="*%COMSPEC%*" ImagePath="*/c*" ImagePath="*\\\\.\\pipe\\*" ServiceAccount="LocalSystem"
+
+
+/*
+Validation Note:
+
+The EVTX sample was indexed successfully. The matching
+Windows Event ID 7045 confirmed the presence of:
+
+- WinPwnage Service
+- %COMSPEC%
+- /c
+- \\.\pipe\WinPwnagePipe
+- LocalSystem
+
+These indicators validate the Sigma detection logic
+for suspicious Windows service creation.
+*/
+
+
+/* Investigation Query */
+
+index=evtx_attack2 EventCode=7045
+| rex field=_raw "Service Name:\s+(?<ServiceName>.*?)\s+File Name:"
+| rex field=_raw "File Name:\s+(?<ImagePath>.*?)\s+Service Type:"
+| rex field=_raw "Service Type:\s+(?<ServiceType>.*?)\s+Service Start Type:"
+| rex field=_raw "Service Start Type:\s+(?<StartType>.*?)\s+Service Account:"
+| rex field=_raw "Service Account:\s+(?<ServiceAccount>.*?)\s*$"
+| table _time ComputerName ServiceName ImagePath ServiceType StartType ServiceAccount

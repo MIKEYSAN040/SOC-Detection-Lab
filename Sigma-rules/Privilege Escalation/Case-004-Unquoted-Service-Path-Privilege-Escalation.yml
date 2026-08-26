@@ -1,0 +1,31 @@
+title: Unquoted Service Path Privilege Escalation
+id: 
+status: experimental
+description: Detects payload creation and execution associated with an Unquoted Windows Service Path privilege escalation attack.
+author: Darshan K
+date: 2026-08-25
+references:
+  - https://attack.mitre.org/techniques/T1574/009/
+logsource:
+  product: windows
+  service: sysmon
+
+detection:
+
+  payload_creation:
+    EventID: 11
+    TargetFilename|endswith: '\program.exe'
+    Image|endswith: '\cmd.exe'
+
+  payload_execution:
+    EventID: 1
+    Image|endswith: '\program.exe'
+    ParentImage|endswith: '\services.exe'
+
+  condition: payload_creation or payload_execution
+
+falsepositives:
+  - Administrative testing
+  - Security research laboratories
+  - Deliberate proof-of-concept demonstrations
+

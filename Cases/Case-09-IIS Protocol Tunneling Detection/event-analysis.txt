@@ -1,0 +1,21 @@
+# Event Analysis
+
+## Event
+
+- **Sysmon Event ID:** 3
+- **Process:** w3wp.exe
+
+## Observed Activity
+
+The IIS worker process initiated TCP connections to:
+
+- Port **3389** (RDP)
+- Port **445** (SMB)
+
+These connections are uncommon for IIS and are consistent with protocol tunneling behavior.
+
+Normal UDP NetBIOS (137) traffic observed in the dataset was excluded from the investigation.
+
+## Conclusion
+
+The dataset demonstrates suspicious IIS-based protocol tunneling aligned with **MITRE ATT&CK T1572**.

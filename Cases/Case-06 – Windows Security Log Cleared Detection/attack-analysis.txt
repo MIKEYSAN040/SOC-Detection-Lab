@@ -1,0 +1,67 @@
+# Attack Analysis
+
+## ATT&CK Technique
+
+**Technique:** T1070.001
+
+**Name:** Indicator Removal on Host: Clear Windows Event Logs
+
+**Tactic:** Defense Evasion
+
+---
+
+## Description
+
+Windows Security Event ID 1102 indicates that the Security Event Log has been cleared.
+
+Attackers frequently clear Windows Event Logs after performing malicious activities such as privilege escalation, credential theft, persistence establishment, or lateral movement. Clearing logs removes forensic evidence and complicates incident response.
+
+---
+
+## Observed Activity
+
+Dataset:
+
+DE_1102_security_log_cleared.evtx
+
+Observed Event:
+
+- Event ID: 1102
+- Security Log Cleared
+- Host: PC01.example.corp
+- User: user01
+
+---
+
+## Impact
+
+Successful clearing of Security Logs may remove evidence related to:
+
+- Authentication events
+- Privilege escalation
+- Malware execution
+- Lateral movement
+- User activity
+- Administrative actions
+
+---
+
+## MITRE Mapping
+
+Technique
+
+T1070.001
+
+Indicator Removal on Host: Clear Windows Event Logs
+
+Tactic
+
+Defense Evasion
+
+---
+
+## Risk
+
+High
+
+The Security Log is one of the primary forensic artifacts used during incident response. Clearing this log significantly reduces visibility into attacker activity.

@@ -1,0 +1,55 @@
+# Validation
+
+## Dataset
+
+DE_1102_security_log_cleared.evtx
+
+Platform
+
+Windows
+
+SIEM
+
+Splunk Enterprise
+
+---
+
+## Sigma Validation
+
+The Sigma rule successfully detected Windows Security Event ID 1102.
+
+Detection Status
+
+PASS
+
+---
+
+## Splunk Validation
+
+SPL Query
+
+index=<index> EventCode=1102
+
+Result
+
+One matching event was returned corresponding to the Security Log being cleared.
+
+---
+
+## Detection Validation
+
+Expected Detection
+
+✔ Event ID 1102
+
+✔ User Account
+
+✔ Computer Name
+
+✔ Logon ID
+
+✔ Timestamp
+
+Observed Result
+
+Detection successfully identified the Security Log clearing event.

@@ -1,0 +1,47 @@
+# Event Analysis
+
+## Event Summary
+
+Event ID
+
+10
+
+Description
+
+Sysmon recorded a process accessing another process. In this case, Mimikatz accessed the memory of the LSASS process.
+
+---
+
+## Important Fields
+
+- Event ID
+- UtcTime
+- Computer Name
+- Source Process
+- Target Process
+- Source Process ID
+- Target Process ID
+- Granted Access
+- Call Trace
+
+---
+
+## Analysis
+
+The event shows that `mimikatz.exe` attempted to access the memory of `lsass.exe` with a Granted Access value of `0x1010`.
+
+LSASS stores Windows authentication material including plaintext passwords, NTLM hashes, Kerberos tickets, and cached credentials. This behavior is consistent with credential dumping using the Mimikatz `sekurlsa::logonpasswords` module.
+
+The call trace further confirms that the memory access originated from the Mimikatz executable.
+
+---
+
+## Related Events
+
+No additional events were present in the dataset. The single Sysmon Event ID 10 provides sufficient evidence of the credential dumping activity.
+
+---
+
+## Conclusion
+
+The dataset contains one high-confidence malicious event demonstrating credential dumping through unauthorized access to LSASS memory using Mimikatz.

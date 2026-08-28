@@ -1,0 +1,82 @@
+# Detection Validation
+
+## Objective
+
+Validate that the detection successfully identifies Active Directory discovery activity performed through RPC enumeration.
+
+---
+
+## Validation Steps
+
+### Step 1
+
+Imported the Windows Security Event Log dataset into Splunk Enterprise.
+
+Dataset:
+
+discovery_bloodhound.evtx
+
+Status:
+
+PASS
+
+---
+
+### Step 2
+
+Executed the Event ID 5145 detection query.
+
+Observed:
+
+Administrative share:
+
+IPC$
+
+Status:
+
+PASS
+
+---
+
+### Step 3
+
+Identified repeated RPC endpoint access.
+
+Observed:
+
+- samr
+- lsarpc
+- NETLOGON
+- srvsvc
+
+Status:
+
+PASS
+
+---
+
+### Step 4
+
+Correlated events.
+
+Observed:
+
+Account:
+
+user01
+
+Source:
+
+10.0.2.17
+
+Multiple RPC interfaces accessed within seconds.
+
+Status:
+
+PASS
+
+---
+
+## Validation Result
+
+The detection successfully identified a sequence of RPC requests associated with Active Directory enumeration. The observed behavior matches known BloodHound discovery techniques and provides sufficient evidence for detection.

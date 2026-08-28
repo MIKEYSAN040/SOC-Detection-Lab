@@ -1,0 +1,68 @@
+# Attack Analysis
+
+## ATT&CK Technique
+
+Technique T1003.001
+
+Name OS Credential Dumping LSASS Memory
+
+Tactic Credential Access
+
+---
+
+## Description
+
+Attackers commonly target the Windows Local Security Authority Subsystem Service (LSASS) to obtain authentication material stored in memory. Tools such as Mimikatz leverage this technique to extract plaintext passwords, NTLM hashes, Kerberos tickets, and cached credentials.
+
+Sysmon Event ID 10 records process access activity and provides valuable telemetry for detecting unauthorized access to LSASS.
+
+---
+
+## Observed Activity
+
+Dataset
+
+sysmon_10_lsass_mimikatz_sekurlsa_logonpasswords.evtx
+
+Observed Event
+
+- Event ID 10
+- Source Process mimikatz.exe
+- Target Process lsass.exe
+- Granted Access 0x1010
+
+---
+
+## Impact
+
+Credential dumping may expose
+
+- Windows user passwords
+- NTLM password hashes
+- Kerberos tickets
+- Cached credentials
+- Service account credentials
+
+Compromised credentials can be used for privilege escalation and lateral movement.
+
+---
+
+## MITRE Mapping
+
+Technique
+
+T1003.001
+
+OS Credential Dumping LSASS Memory
+
+Tactic
+
+Credential Access
+
+---
+
+## Risk
+
+Critical
+
+Unauthorized access to LSASS is one of the most reliable indicators of credential theft activity and often precedes further compromise within the environment.

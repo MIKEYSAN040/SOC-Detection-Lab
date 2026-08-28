@@ -1,0 +1,18 @@
+# Validation
+
+## Dataset
+
+- tunna_iis_rdp_smb_tunneling_sysmon_3.evtx
+- Splunk Index: detection9
+
+## Detection Query
+
+```spl
+index=detection9 EventCode=3 Image="*w3wp.exe" (DestinationPort=3389 OR DestinationPort=445)
+```
+
+## Result
+
+Detection successfully identified IIS connections to RDP and SMB services.
+
+**Status:** PASS

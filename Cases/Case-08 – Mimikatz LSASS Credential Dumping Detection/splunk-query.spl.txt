@@ -1,0 +1,42 @@
+/*
+Detection: Mimikatz LSASS Credential Dumping
+
+Data Source:
+
+The Sysmon EVTX attack sample was imported into Splunk
+using the "detection8" index.
+
+EventCode=10:
+
+Sysmon Event ID 10 records Process Access events.
+This detection identifies Mimikatz accessing the LSASS
+process, which is a common credential dumping technique.
+*/
+
+
+/* Detection Query */
+
+index=detection8 EventCode=10 SourceImage="*mimikatz.exe" TargetImage="*lsass.exe"
+
+
+/*
+Validation Note:
+
+The EVTX sample was indexed successfully.
+
+The matching Sysmon Event ID 10 confirmed:
+
+- Mimikatz executable
+- LSASS process access
+- Granted Access (0x1010)
+- Process Call Trace
+
+These indicators validate the Sigma detection logic
+for detecting credential dumping through LSASS memory access.
+*/
+
+
+/* Investigation Query */
+
+index=detection8 EventCode=10
+| table _time ComputerName SourceImage TargetImage SourceProcessId TargetProcessId GrantedAccess CallTrace

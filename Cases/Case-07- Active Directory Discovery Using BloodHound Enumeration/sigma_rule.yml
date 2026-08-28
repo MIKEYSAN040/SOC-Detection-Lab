@@ -1,0 +1,38 @@
+title: BloodHound Active Directory Discovery via IPC$ RPC Enumeration
+id: 
+status: experimental
+description: >
+  Detects Windows Security Event ID 5145 indicating repeated access
+  to Active Directory RPC interfaces over the IPC$ administrative
+  share. This behavior is commonly associated with BloodHound or
+  SharpHound performing Active Directory reconnaissance.
+
+author: Darshan K
+date: 2026-08-25
+
+
+logsource:
+  product: windows
+  service: security
+
+detection:
+
+  selection:
+    EventID: 5145
+    ShareName|contains: 'IPC$'
+
+  rpc_targets:
+    Relative_Target_Name:
+      - 'samr'
+      - 'lsarpc'
+      - 'NETLOGON'
+      - 'srvsvc'
+
+  condition: selection and rpc_targets
+
+falsepositives:
+  - Domain administration
+  - Active Directory management tools
+  - Microsoft administrative utilities
+  - Enterprise asset inventory tools
+

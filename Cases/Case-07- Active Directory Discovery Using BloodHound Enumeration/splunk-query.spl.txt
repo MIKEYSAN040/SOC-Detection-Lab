@@ -1,0 +1,45 @@
+/*
+Detection: Windows Security Event Log Cleared
+
+Data Source:
+
+The Windows Security EVTX attack sample was imported into Splunk
+using the "detections7" index.
+
+EventCode=1102:
+
+Windows Security Event ID 1102 records when the
+Windows Security Event Log has been cleared.
+
+Clearing the Security Event Log is a well-known
+Defense Evasion technique used by attackers to
+remove forensic evidence after malicious activity.
+*/
+
+
+/* Detection Query */
+
+index=detections7 EventCode=1102
+
+
+/*
+Validation Note:
+
+The EVTX sample was indexed successfully.
+
+The matching Windows Event ID 1102 confirmed that:
+
+- Windows Security Event Log was cleared
+- User responsible for clearing the log was identified
+- Computer where the action occurred was recorded
+- Logon Session ID was available
+
+These indicators validate the Sigma detection logic
+for Windows Security Event Log clearing.
+*/
+
+
+/* Investigation Query */
+
+index=detections7 EventCode=1102
+| table _time ComputerName EventCode RecordNumber _raw

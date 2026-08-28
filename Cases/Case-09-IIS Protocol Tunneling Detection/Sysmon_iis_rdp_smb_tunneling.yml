@@ -1,0 +1,39 @@
+title: Suspicious IIS Worker Process Connecting to RDP or SMB
+id: 
+status: stable
+description: Detects IIS worker process (w3wp.exe) initiating network connections to Remote Desktop Protocol (3389) or SMB (445), which may indicate tunneling or web server abuse.
+author: Darshan K
+date: 2026/08/26
+
+
+logsource:
+  product: windows
+  service: sysmon
+
+detection:
+  selection:
+    EventID: 3
+    Image|endswith: '\w3wp.exe'
+    DestinationPort:
+      - 3389
+      - 445
+
+  condition: selection
+
+fields:
+  - UtcTime
+  - Computer
+  - Image
+  - User
+  - SourceIp
+  - SourcePort
+  - DestinationIp
+  - DestinationPort
+  - Protocol
+
+falsepositives:
+  - IIS applications intentionally proxying internal services
+  - Administrative testing in controlled environments
+
+level: high
+

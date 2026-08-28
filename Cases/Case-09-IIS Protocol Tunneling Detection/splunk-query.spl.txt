@@ -1,0 +1,18 @@
+/*
+Detection: IIS Protocol Tunneling
+
+Sysmon Event ID 3 detects network connections initiated by
+the IIS worker process (w3wp.exe) to RDP (3389) or SMB (445),
+which may indicate protocol tunneling.
+*/
+
+
+/* Detection Query */
+
+index=detection9 EventCode=3 Image="*w3wp.exe" (DestinationPort=3389 OR DestinationPort=445)
+
+
+/* Investigation Query */
+
+index=detection9 EventCode=3
+| table _time ComputerName Image User SourceIp SourcePort DestinationIp DestinationPort Protocol

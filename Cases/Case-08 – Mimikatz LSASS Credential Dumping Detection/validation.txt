@@ -1,0 +1,59 @@
+# Validation
+
+## Dataset
+
+sysmon_10_lsass_mimikatz_sekurlsa_logonpasswords.evtx
+
+Platform
+
+Windows
+
+SIEM
+
+Splunk Enterprise
+
+Splunk Index
+
+detection8
+
+---
+
+## Sigma Validation
+
+The Sigma rule successfully detected Sysmon Event ID 10 involving Mimikatz accessing the LSASS process.
+
+Detection Status
+
+PASS
+
+---
+
+## Splunk Validation
+
+SPL Query
+
+index=detection8 EventCode=10 SourceImage="*mimikatz.exe" TargetImage="*lsass.exe"
+
+Result
+
+One matching event was returned corresponding to unauthorized access to LSASS by Mimikatz.
+
+---
+
+## Detection Validation
+
+Expected Detection
+
+✔ Sysmon Event ID 10
+
+✔ Source Process (mimikatz.exe)
+
+✔ Target Process (lsass.exe)
+
+✔ Granted Access (0x1010)
+
+✔ Call Trace
+
+Observed Result
+
+Detection successfully identified the credential dumping attempt.

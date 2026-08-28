@@ -1,0 +1,75 @@
+# Attack Analysis
+
+## Overview
+
+This dataset demonstrates a classic **Unquoted Service Path Privilege Escalation** attack.
+
+Windows services configured without quotation marks around executable paths containing spaces are vulnerable because Windows attempts to resolve the executable by checking each path component in sequence.
+
+For example,
+
+C:\Program Files\VulnSvc\mmm.exe
+
+may be interpreted as
+
+C:\program.exe
+
+if quotation marks are absent.
+
+An attacker abuses this behavior by placing a malicious executable named:
+
+C:\program.exe
+
+When the vulnerable service starts, Windows executes the attacker's executable instead of the legitimate service binary.
+
+---
+
+## Attack Timeline
+
+### Stage 1 — Payload Creation
+
+Sysmon Event ID 11 recorded the creation of:
+
+C:\program.exe
+
+The file was created by:
+
+C:\Windows\System32\cmd.exe
+
+Sysmon also matched the event against its built-in detection rule:
+
+PrivEsc – Potential PrivEsc via Unquoted Service
+
+This represents the attacker's payload being placed where Windows will search first.
+
+---
+
+### Stage 2 — Service Execution
+
+A Process Create event (Sysmon Event ID 1) showed:
+
+Parent Process:
+
+C:\Windows\System32\services.exe
+
+Executed Image:
+
+C:\program.exe
+
+User:
+
+NT AUTHORITY\SYSTEM
+
+Integrity Level:
+
+System
+
+Because Windows Service Control Manager started the process, the malicious executable inherited SYSTEM privileges.
+
+---
+
+## Attack Outcome
+
+The attacker successfully leveraged an unquoted Windows service path to execute arbitrary code with SYSTEM privileges.
+
+This behavior maps directly to Privilege Escalation through exploitation of insecure service configuration.

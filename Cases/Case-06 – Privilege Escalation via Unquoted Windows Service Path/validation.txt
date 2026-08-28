@@ -1,0 +1,105 @@
+# Detection Validation
+
+## Objective
+
+Validate that the detection successfully identifies an Unquoted Windows Service Path Privilege Escalation attack.
+
+---
+
+## Validation Steps
+
+### Step 1
+
+Imported the Sysmon dataset into Splunk Enterprise.
+
+Dataset:
+
+privesc_unquoted_svc_sysmon_1_11.evtx
+
+---
+
+### Step 2
+
+Executed the File Create detection query.
+
+Result:
+
+One Event ID 11 event identified creation of:
+
+C:\program.exe
+
+RuleName:
+
+PrivEsc – Potential PrivEsc via Unquoted Service
+
+Status:
+
+PASS
+
+---
+
+### Step 3
+
+Executed the Process Create detection query.
+
+Result:
+
+One Event ID 1 event showed:
+
+Image:
+
+C:\program.exe
+
+Parent:
+
+services.exe
+
+User:
+
+NT AUTHORITY\SYSTEM
+
+Integrity Level:
+
+System
+
+Status:
+
+PASS
+
+---
+
+### Step 4
+
+Correlated both events.
+
+Observed sequence:
+
+cmd.exe
+
+↓
+
+Creates C:\program.exe
+
+↓
+
+services.exe
+
+↓
+
+Executes C:\program.exe
+
+↓
+
+SYSTEM Privileges
+
+Status:
+
+PASS
+
+---
+
+## Validation Result
+
+The detection successfully identified both the malicious payload creation and its subsequent execution under SYSTEM privileges.
+
+The reconstructed attack chain confirms successful detection of the privilege escalation technique.

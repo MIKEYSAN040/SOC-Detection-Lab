@@ -1,0 +1,33 @@
+# Detection Validation
+
+## Objective
+
+Validate that the Sigma rule detects suspicious Windows service installation using the command shell and named pipe communication.
+
+---
+
+## Validation Process
+
+1. Imported the EVTX dataset into Splunk.
+2. Executed the converted Splunk query.
+3. Verified the detection matched Event ID 7045.
+4. Reviewed the extracted service fields.
+
+---
+
+## Detection Result
+
+The detection identified a service configured with:
+
+- Service Name: `WinPwnage Service`
+- `%COMSPEC%`
+- Named Pipe (`\\.\pipe\WinPwnagePipe`)
+- Service Account: `LocalSystem`
+
+---
+
+## Validation Status
+
+**PASS**
+
+The Sigma rule successfully detected the suspicious service installation contained in the dataset.

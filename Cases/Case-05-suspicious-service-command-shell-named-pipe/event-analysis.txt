@@ -1,0 +1,44 @@
+# Event Analysis
+
+## Event Summary
+
+| Event ID | Activity |
+|----------|----------|
+| 7045 | Windows Service Installation |
+
+---
+
+## Key Observations
+
+| Field | Value |
+|------|-------|
+| Service Name | WinPwnage Service |
+| Service Type | User Mode Service |
+| Service Start Type | Demand Start |
+| Service Account | LocalSystem |
+
+---
+
+## Service Command
+
+```text
+%COMSPEC% /c ping -n 1 127.0.0.1 >nul && echo 'WinPwnage' > \\.\pipe\WinPwnagePipe
+```
+
+The service launches the Windows command interpreter and references a named pipe instead of executing a standard application directly.
+
+---
+
+## Suspicious Indicators
+
+- Windows Event ID 7045
+- `%COMSPEC%`
+- `/c`
+- Named Pipe (`\\.\pipe\WinPwnagePipe`)
+- LocalSystem account
+
+---
+
+## Conclusion
+
+The event shows installation of a Windows service configured to execute shell commands while interacting with a named pipe under the LocalSystem account. This behavior is uncommon for legitimate services and should be investigated as a potential persistence mechanism.

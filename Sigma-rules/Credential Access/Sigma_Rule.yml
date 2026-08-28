@@ -1,0 +1,35 @@
+title: Suspicious LSASS Access by Mimikatz
+id: 
+status: stable
+description: Detects Mimikatz accessing the LSASS process using Sysmon Event ID 10, indicating potential credential dumping.
+author: Darshan K
+date: 2026/08/26
+
+logsource:
+  product: windows
+  service: sysmon
+
+detection:
+  selection:
+    EventID: 10
+    SourceImage|endswith: '\mimikatz.exe'
+    TargetImage|endswith: '\lsass.exe'
+
+  condition: selection
+
+fields:
+  - UtcTime
+  - Computer
+  - SourceImage
+  - SourceProcessId
+  - TargetImage
+  - TargetProcessId
+  - GrantedAccess
+  - CallTrace
+
+falsepositives:
+  - Authorized security testing using Mimikatz
+  - Controlled penetration testing in lab environments
+
+
+ 

@@ -1,0 +1,29 @@
+title: Windows Security Event Log Cleared
+id:
+status: stable
+description: Detects when the Windows Security Event Log has been cleared, which may indicate an attacker attempting to remove forensic evidence.
+author: Darshan K
+date: 2026/08/26
+
+logsource:
+  product: windows
+  service: security
+
+detection:
+  selection:
+    EventCode: 1102
+
+  condition: selection
+
+fields:
+  - EventID
+  - ComputerName
+  - SubjectUserSid
+  - SubjectUserName
+  - SubjectDomainName
+  - SubjectLogonId
+
+falsepositives:
+  - Legitimate administrative maintenance
+  - Security audit log maintenance by authorized administrators
+
